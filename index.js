@@ -18,7 +18,6 @@ module.exports = function(embark) {
 			process: async (callback) => {
 				//console.log("CMD: init")
 				const cmdName = cmd.match(/".*?"|\S+/g);
-				//console.log("cmdName.length", cmdName.length)
 				if(!cmdName.length === 3) {
 					help();
 				} else {
@@ -29,10 +28,8 @@ module.exports = function(embark) {
 						if (!cntrct || !cntrct.deployedAddress) {
 							return callback("Could not find contract " + contractName + ".");
 						}
-						//console.log("contract is first", JSON.stringify(contract))
 						contract = new web3.eth.Contract(cntrct.abiDefinition, cntrct.address)
 						console.log("ECCÌ set to interact with contract at " + contract._address + ".")
-						//console.log(JSON.stringify(contract))
 					});
 				}
 				return callback(null, "");	
@@ -64,26 +61,18 @@ module.exports = function(embark) {
 						cmdName[0] === 'call')
 			},
 			process: async (callback) => {
-				console.log("CMD: call")
 				const cmdName = cmd.match(/{.*?}|\S+/g);
-				console.log("cmdName", cmdName)
 				if(!(cmdName.length >= 2 && cmdName.length <= 4)) {
 					help();
 					return callback(null, "")
 				} else {
-					console.log("method", cmdName[1])
-					console.log("params", cmdName[2])
-					console.log("options", cmdName[3])
 					let func = contract.methods[cmdName[1]]
 					if(!func) {
 						console.log("'" + cmdName[1] + "' is not a function of the contract at address " + contract._address + ".")
 						return
 					}
-					console.log("func", func)
 					let params = parseParams(cmdName[2]);
-					console.log("params", params)
 					let options = parseOptions(cmdName[3]);
-					console.log("options", options)
 					if(!params || params === "{}") {
 						return callback(null, await func().call(options))
 					} else {
@@ -103,26 +92,18 @@ module.exports = function(embark) {
 						cmdName[0] === 'send')
 			},
 			process: async (callback) => {
-				//console.log("CMD: send")
 				const cmdName = cmd.match(/{.*?}|\S+/g);
 				if(!(cmdName.length >= 2 && cmdName.length <= 4)) {
 					help();
 					return callback(null, "")
 				} else {
-					//console.log("method", cmdName[1])
-					//console.log("params", cmdName[2])
-					//console.log("options", cmdName[3])
 					let params = parseParams(cmdName[2]);
-					//console.log("params", params)
 					let func = contract.methods[cmdName[1]]
 					if(!func) {
 						console.log("'" + cmdName[1] + "' is not a function of the contract at address " + contract._address + ".")
 						return
 					}
-					//console.log("func", func)
-					//console.log("params", params)
 					let options = parseOptions(cmdName[3]);
-					//console.log("options", options)
 					if(!params) {
 						return callback(null, await func().send(options))
 					} else {
@@ -151,8 +132,6 @@ module.exports = function(embark) {
 		if(!paramString || paramString === "{}")
 			return;
 
-		//params = cmdName[2].match(/{.*?}|\S+/g);
-		
 		params = paramString.split(",")
 		for(var i = 0; i < params.length; i++) {
 			console.log(i, params[i])
@@ -162,21 +141,17 @@ module.exports = function(embark) {
 
 		params = params.map(obj => {
 			let evaled = eval(obj)
-			//console.log("param value", obj)
-			//console.log("param evaled", evaled)
 			if(typeof evaled == 'number')
 				return obj
 			else return evaled
 		});
 		
-		console.log("params-end", params)
 		return params;
 	}
 
 	function parseOptions(optionsString) {
 		if(!optionsString || optionsString === "{}") {
 			let defaultAddress = eval(accounts[0])
-			console.log("defaultAddress", "{from: \"" + accounts[0] + "\"}")
 			return JSON5.parse("{from: \"" + accounts[0] + "\"}");
 		}
 
@@ -189,9 +164,6 @@ module.exports = function(embark) {
 			else return evaled
 		})
 
-
-
-		console.log("options-end", options)
 		return options;
 	}
 }
