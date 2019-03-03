@@ -1,6 +1,17 @@
 # ECCÌ: Embark Console Contract Interaction
 
-Status Embark plugin to make interaction with smart contracts a little easier.
+Status Embark plugin to make interaction with smart contracts a little easier. So instead of this
+
+```
+await MAU.methods.mint("0x6DC4Ae6F756287DA58EE29a0fba6676718EfC496", 100).send({ "from": "0x6DC4Ae6F756287DA58EE29a0fba6676718EfC496" })
+```
+
+you can do this:
+
+```
+send mint { accounts[0], 100 }
+```
+
 
 ## Usage
 

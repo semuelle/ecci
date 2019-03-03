@@ -24,7 +24,6 @@ module.exports = function(embark) {
 				} else {
 					accounts = await web3.eth.getAccounts()
 					defaultAccount = web3.eth.defaultAccount
-					console.log("typeof cmdName[2] == 'number'", (typeof cmdName[2]) == 'number')
 					contractName = cmdName[2]
 					embark.events.request('contracts:contract', contractName, async (cntrct) => {
 						if (!cntrct || !cntrct.deployedAddress) {
@@ -33,7 +32,7 @@ module.exports = function(embark) {
 						//console.log("contract is first", JSON.stringify(contract))
 						contract = new web3.eth.Contract(cntrct.abiDefinition, cntrct.address)
 						console.log("ECCÌ set to interact with contract at " + contract._address + ".")
-						console.log(JSON.stringify(contract))
+						//console.log(JSON.stringify(contract))
 					});
 				}
 				return callback(null, "");	
@@ -175,8 +174,11 @@ module.exports = function(embark) {
 	}
 
 	function parseOptions(optionsString) {
-		if(!optionsString || optionsString === "{}")
-			return;
+		if(!optionsString || optionsString === "{}") {
+			let defaultAddress = eval(accounts[0])
+			console.log("defaultAddress", "{from: \"" + accounts[0] + "\"}")
+			return JSON5.parse("{from: \"" + accounts[0] + "\"}");
+		}
 
 		options = JSON5.parse(optionsString, (key, value) => {
 			let evaled = eval(value)
@@ -186,6 +188,8 @@ module.exports = function(embark) {
 				return value
 			else return evaled
 		})
+
+
 
 		console.log("options-end", options)
 		return options;
