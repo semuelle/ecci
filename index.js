@@ -1,10 +1,8 @@
 const JSON5 = require('json5')
 
 module.exports = function(embark) {
-	let contractName;
 	let contract;
 	let accounts;
-	let defaultAccount;
 
     embark.registerConsoleCommand(function(cmd, options) {
     	
@@ -16,17 +14,14 @@ module.exports = function(embark) {
 						cmdName[1] === 'init')
 			},
 			process: async (callback) => {
-				//console.log("CMD: init")
 				const cmdName = cmd.match(/".*?"|\S+/g);
 				if(!cmdName.length === 3) {
 					help();
 				} else {
 					accounts = await web3.eth.getAccounts()
-					defaultAccount = web3.eth.defaultAccount
-					contractName = cmdName[2]
-					embark.events.request('contracts:contract', contractName, async (cntrct) => {
+					embark.events.request('contracts:contract', cmdName[2], async (cntrct) => {
 						if (!cntrct || !cntrct.deployedAddress) {
-							return callback("Could not find contract " + contractName + ".");
+							return callback("Could not find contract " + cmdName[2] + ".");
 						}
 						contract = new web3.eth.Contract(cntrct.abiDefinition, cntrct.address)
 						console.log("ECCÌ set to interact with contract at " + contract._address + ".")
@@ -157,8 +152,6 @@ module.exports = function(embark) {
 
 		options = JSON5.parse(optionsString, (key, value) => {
 			let evaled = eval(value)
-			//console.log("value", value)
-			//console.log("evaled", evaled)
 			if(typeof evaled == 'number')
 				return value
 			else return evaled
