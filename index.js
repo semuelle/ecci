@@ -117,7 +117,7 @@ module.exports = function(embark) {
 		console.log("       and   [options] are the call/send parameters ('from', 'gas', etc.).")
 		console.log("")
 		console.log("Commands:")
-		console.log("\tinit <name>\tDefine contract to interact with.")
+		console.log("\tinit <name>\tDefine contract to interact with by <name>.")
 		console.log("\tcall\t\tCall a constant contract function.")
 		console.log("\tsend\t\tCall a non-constant contract function.")
 		console.log("\thelp\t\tThis help.")
