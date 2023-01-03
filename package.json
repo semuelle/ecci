@@ -9,6 +9,6 @@
   "author": "sebastian@flexdapps.com",
   "license": "ISC",
   "dependencies": {
-    "json5": "^2.1.0"
+    "json5": "^2.2.2"
   }
 }
